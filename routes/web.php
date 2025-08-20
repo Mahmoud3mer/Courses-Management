@@ -6,9 +6,10 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TrainingCourseController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LanguageController;
 
 // Home Page
-Route::get('/', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 
 // Courses routs
 Route::get('courses', [CourseController::class, 'index'])->name('courses.index');
@@ -37,6 +38,9 @@ Route::post('login', [AuthController::class, 'login'])->name('login.post');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('register', [AuthController::class, 'register'])->name('register.post');
+
+// Localization Route
+Route::get('language/switch', [LanguageController::class, 'switchLocale'])->name('language.switch');
 
 // Fallback Route
 Route::fallback(function () {

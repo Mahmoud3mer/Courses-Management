@@ -13,7 +13,7 @@
             <p>أنت مسجل الدخول.</p>
             <form class="logout-form" method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="btn btn-danger">تسجيل الخروج</button>
+                <button type="submit" class="btn btn-danger">{{ trans('myCustom.logout') }}</button>
             </form>
         </div>
 

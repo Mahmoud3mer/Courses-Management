@@ -5,7 +5,7 @@
             <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="index3.html" class="nav-link"> الرئيسية </a>
+            <a href="{{ route('dashboard') }}" class="nav-link"> الرئيسية </a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link"> تواصل </a>
@@ -118,6 +118,21 @@
             <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
                     class="fas fa-th-large"></i></a>
         </li>
+
+        <li class="nav-item dropdown" title="language">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="fas fa-globe"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <a href="{{ route('language.switch', ['language' => 'ar']) }}" class="dropdown-item">
+                    <i class="fas fa-language mr-2"></i> العربية
+                </a>
+                <a href="{{ route('language.switch', ['language' => 'en']) }}" class="dropdown-item">
+                    <i class="fas fa-language mr-2"></i> English
+                </a>
+            </div>
+        </li>
+
         <li>
             <a title="تسجيل الخروج" class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt text-danger"></i>

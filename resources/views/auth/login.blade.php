@@ -10,12 +10,13 @@
 <body style="overflow-x:hidden; overflow-y:auto">
     <div class="row">
         <div class="col-md-6 col-12" style="height: 100vh">
-            <img src="{{ asset('learning-education-ideas-insight-intelligence-study-concept.jpg') }}"
-                class="w-100 h-100" alt="">
+            <img src="{{ asset('learning-education-ideas-insight-intelligence-study-concept.jpg') }}" class="w-100 h-100"
+                alt="">
         </div>
 
         <div class="col-md-6 col-12"
             style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column;">
+
             <h1>تسجيل الدخول</h1>
 
             @if (session('error'))
@@ -27,14 +28,15 @@
             <form method="POST" action="{{ route('login.post') }}" class='w-100' style='padding-inline:15px;'>
                 @csrf
                 <div class="mb-3">
-                    <label>البريد الإلكتروني</label>
+                    {{-- <label>البريد الإلكتروني</label> --}}
+                    <label>{{ __('auth.label.email') }}</label>
                     <input type="email" name="email" class="form-control" value="{{ old('email') }}">
                     @error('email')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label>كلمة المرور</label>
+                    <label>{{ __('auth.label.password') }}</label>
                     <input type="password" name="password" class="form-control" value="{{ old('password') }}">
                     @error('password')
                         <div class="text-danger">{{ $message }}</div>
