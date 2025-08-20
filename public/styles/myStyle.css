@@ -1,0 +1,57 @@
+.myModal {
+    position: absolute;
+    top: 40%;
+    right: 34%;
+    transform: translate(-50%, -50%);
+    background: #e2e2e2;
+    padding: 20px 25px;
+    border-radius: 5px;
+    display: none;
+}
+
+.required {
+    color: red;
+    margin-right: 5px;
+}
+
+.label-file-input {
+    cursor: pointer;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px dashed #007bff;
+    width: 300px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s ease;
+}
+
+.label-file-input:hover {
+    color: #005dc1;
+    border-color: #005dc1;
+    background-color: #d4d4d4;
+}
+
+.remove-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+    background: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s ease;
+    display: none;
+}
+
+.remove-image:hover {
+    background: #f8d7da;
+    color: #721c24;
+}
