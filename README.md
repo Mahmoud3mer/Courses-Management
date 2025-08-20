@@ -7,6 +7,45 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+<img width="1918" height="912" alt="image" src="https://github.com/user-attachments/assets/e21a3c64-41b7-4429-8a58-d4f348443a23" />
+
+# 📚 Courses Management System  
+
+**Courses-Management** is a web-based system designed to manage courses, students, and instructors efficiently. It provides an easy way to organize training programs, track progress, and streamline the learning process.  
+
+---
+
+## ✨ Features  
+- 👨‍🏫 **Course Management**: Add, update, and delete training courses.  
+- 👩‍🎓 **Student Management**: Enroll students in courses and track their progress.  
+- 🧑‍🏫 **Instructor Management**: Assign instructors to courses and manage their profiles.  
+- 🔎 **Search & Filter**: Quickly find courses or students.  
+- 📊 **Dashboard**: View statistics about courses, students, and instructors.  
+- 🔐 **Role-Based Access**: Secure authentication with roles (Admin – Instructor – Student).  
+
+---
+
+## 🛠️ Tech Stack  
+- **Backend**: Laravel / PHP  
+- **Frontend**: Blade / React / Angular (depending on your implementation)  
+- **Database**: MySQL  
+- **Authentication**: Laravel Breeze / Passport / Sanctum  
+
+---
+
+## 🚀 Project Goal  
+The main goal of this project is to provide a simple and flexible system for managing training courses, making it easier for administrators to monitor learning activities and for students to access their enrolled courses.  
+
+---
+
+## 📂 Project Setup  
+
+### 1️⃣ Clone the repository  
+```bash
+git clone https://github.com/your-username/Courses-Management.git
+cd Courses-Management
+
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
