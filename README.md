@@ -9,6 +9,9 @@
 
 <img width="1918" height="912" alt="image" src="https://github.com/user-attachments/assets/e21a3c64-41b7-4429-8a58-d4f348443a23" />
 
+# Demo Viedeo 
+https://drive.google.com/file/d/1GVKF5WJ3NYRmGlZVZvB6FSgi9c4xP5RM/view?usp=drive_link
+
 # 📚 Courses Management System  
 
 **Courses-Management** is a web-based system designed to manage courses, students, and instructors efficiently. It provides an easy way to organize training programs, track progress, and streamline the learning process.  
