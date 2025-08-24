@@ -58,6 +58,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- Main content -->
             <div class="content">
                 <div class="container-fluid">
+                    {{-- Notifications --}}
+                    {{-- @foreach ($notifications as $notification)
+                        <div class="notification">
+                            <p>{{ $notification->data['content'] }}</p>
+                            <a href="{{ $notification->data['url'] }}">عرض التفاصيل</a>
+                            @if (!$notification->read_at)
+                                <form action="{{ route('notifications.markAsRead', $notification->id) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button type="submit">وضع علامة كمقروء</button>
+                                </form>
+                            @endif
+                        </div>
+                    @endforeach --}}
+
                     <div class="row" style="margin-top:50px;">
                         @yield('content')
                     </div>

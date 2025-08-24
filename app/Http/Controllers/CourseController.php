@@ -10,8 +10,12 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::paginate(5);
         // dd($courses);
+        if (request()->ajax()) {
+            return view('courses.ajax.course-ajax-search', compact('courses'));
+        }
+
         return view('courses.index', compact('courses'));
     }
 
@@ -52,14 +56,19 @@ class CourseController extends Controller
 
     public function update(CreateCourseValidation $request, $id)
     {
-        $course = Course::findOrFail($id);
-        $course->update($request->validated());
+        $course = Course::find($id);
 
-        $course_is_exists = Course::where("name", '=', $request->name)->where('id', '!=', $course->id)->first();
-
-        if ($course_is_exists) {
-            return redirect()->back()->with(['error' => 'اسم الكورس موجود بالفعل.'])->withInput();
+        if (!$course) {
+            return redirect()->route('courses.index')->with(['error' => 'الكورس غير موجود.']);
         }
+
+        // $course_is_exists = Course::where("name", '=', $request->name)->where('id', '!=', $course->id)->first();
+
+        // if ($course_is_exists) {
+        //     return redirect()->back()->with(['error' => 'الكورس موجود بالفعل.'])->withInput();
+        // }
+
+        $course->update($request->validated());
 
         return redirect()->route('courses.index')->with('success', 'تم تعديل الكورس بنجاح.');
     }
@@ -85,11 +94,11 @@ class CourseController extends Controller
             $searchActive = $request->input('searchByActive');
 
             if ($searchActive == 'all') {
-                $courses = Course::where('name', 'like', '%' . $searchName . '%')->get();
+                $courses = Course::where('name', 'like', '%' . $searchName . '%')->paginate(5);
             } else {
                 $courses = Course::where('name', 'like', '%' . $searchName . '%')
                     ->where('active', $searchActive)
-                    ->get();
+                    ->paginate(5);
             }
 
             return view('courses.ajax.course-ajax-search', compact('courses'));

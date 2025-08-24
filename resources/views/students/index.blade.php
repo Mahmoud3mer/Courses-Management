@@ -30,13 +30,13 @@
             </div>
         @endif
 
-        <div class="card">
-            <div class="card-header" style="display: flex; flex-direction: column; gap:10px;">
+        <div class="">
+            <div class="" style="display: flex; flex-direction: column; gap:10px;">
                 <div style="display: flex; gap:25px;">
                     <h3 class="card-title"> بيانات الطلاب </h3>
                     <a href="{{ route('students.create') }}"><button class="btn btn-primary btn-sm">اضافة جديد</button></a>
                 </div>
-                <div class="card-tools" style="display: flex; gap: 10px; align-items: center;">
+                <div class="" style="display: flex; gap: 10px; align-items: center;">
                     <div class="input-group input-group-sm" style="width: 250px;">
                         {{-- <label for="country_id" class="form-label">البحث باسم الطالب</label> --}}
                         <input type="text" placeholder="البحث باسم الطالب" name="searchByName" id="searchByName"
@@ -62,7 +62,7 @@
 
             <div id="liveAlertPlaceholder"></div>
 
-            <div class="card-body table-responsive p-0" style="height: 300px;" id="ajax_response_table">
+            <div class="table-responsive p-0" id="ajax_response_table" style="margin-top: 20px;">
                 @if (@isset($students) and !@empty($students) and count($students) > 0)
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
@@ -121,6 +121,12 @@
                 @else
                     <p style="text-align: center; color:brown; margin-top:15px;">لا يوجد طلاب مُتاحين</p>
                 @endif
+
+                {{-- Pagination Links --}}
+                <div id="pagination-links-ajax" style="overflow-x: hidden; padding-inline: 15px;">
+                    {{ $students->links('pagination::bootstrap-5') }}
+                </div>
+
             </div>
             <!-- /.card-body -->
         </div>
@@ -165,33 +171,58 @@
         })
 
         // handle delete confirmation
-        let confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        let cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-        let delete_course_btn = document.querySelectorAll('.delete-course-btn');
-        let modal = document.getElementById('modal');
+        // let confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        // let cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        // let delete_course_btn = document.querySelectorAll('.delete-course-btn');
+        // let modal = document.getElementById('modal');
 
-        let formToDelete = null;
+        // let formToDelete = null;
 
-        delete_course_btn.forEach(button => {
-            button.addEventListener('click', function() {
-                console.log('Delete button clicked', this.id);
+        // delete_course_btn.forEach(button => {
+        //     button.addEventListener('click', function() {
+        //         console.log('Delete button clicked', this.id);
 
-                modal.style.display = 'block';
-                formToDelete = this.closest('.delete-course-form');
-            });
+        //         modal.style.display = 'block';
+        //         formToDelete = this.closest('.delete-course-form');
+        //     });
+        // });
+
+        // cancelDeleteBtn.addEventListener('click', function() {
+        //     // Close the modal
+        //     modal.style.display = 'none';
+        //     formToDelete = null;
+        // });
+
+        // confirmDeleteBtn.addEventListener('click', function() {
+        //     if (formToDelete) {
+        //         formToDelete.submit();
+        //     }
+
+        //     modal.style.display = 'none';
+        // });
+
+
+        // استخدم Event Delegation على عنصر أب ثابت (مثل document)
+        document.addEventListener('click', function(event) {
+            // تحقق مما إذا كان العنصر الذي تم النقر عليه يحتوي على الكلاس 'delete-course-btn'
+            if (event.target.classList.contains('delete-course-btn')) {
+                let modal = document.getElementById('modal');
+                let formToDelete = event.target.closest('.delete-course-form');
+
+                if (modal && formToDelete) {
+                    modal.style.display = 'block';
+                    document.getElementById('confirmDeleteBtn').onclick = function() {
+                        formToDelete.submit();
+                    };
+                }
+            }
         });
+
+        // تأكد من أن مستمعي الأحداث الآخرين للمودال موجودين
+        let modal = document.getElementById('modal');
+        let cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
         cancelDeleteBtn.addEventListener('click', function() {
-            // Close the modal
-            modal.style.display = 'none';
-            formToDelete = null;
-        });
-
-        confirmDeleteBtn.addEventListener('click', function() {
-            if (formToDelete) {
-                formToDelete.submit();
-            }
-
             modal.style.display = 'none';
         });
 
@@ -221,6 +252,32 @@
                         console.error(xhr);
                     }
                 })
+            });
+
+
+            // Ajax pagination
+            $(document).on('click', '#pagination-links-ajax a', function(e) {
+                e.preventDefault();
+                let url = $(this).attr('href');
+                let searchValue = $('#searchByName').val();
+                let searchCountry = $('#searchByCountry').val();
+
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    dataType: 'html',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        searchByName: searchValue,
+                        searchByCountry: searchCountry
+                    },
+                    success: function(response) {
+                        $('#ajax_response_table').html(response);
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
             });
         });
     </script>

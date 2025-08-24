@@ -30,16 +30,17 @@
             </div>
         @endif
 
-        <div class="card">
-            <div class="card-header" style="display: flex; justify-content: space-between;">
+        <div class="">
+            <div class="" style="display: flex; justify-content: space-between;">
                 <h3 class="card-title"> بيانات الدورات التدريبية </h3>
-                <a href="{{ route('training-courses.create') }}"><button class="btn btn-primary btn-sm">اضافة جديد</button></a>
+                <a href="{{ route('training-courses.create') }}"><button class="btn btn-primary btn-sm">اضافة
+                        جديد</button></a>
             </div>
 
             {{-- مكان لعرض رسالة النجاح أو الخطأ  Alert --}}
             <div id="liveAlertPlaceholder"></div>
 
-            <div class="card-body table-responsive p-0" style="height: 300px;">
+            <div class="table-responsive p-0">
                 @if (@isset($trainingCourses) and !@empty($trainingCourses) and count($trainingCourses) > 0)
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
@@ -59,7 +60,8 @@
                                 @foreach ($trainingCourses as $course)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('training-courses.show', $course->id) }}">{{ $course->course->name }}</a>
+                                            <a
+                                                href="{{ route('training-courses.show', $course->id) }}">{{ $course->course->name }}</a>
                                         </td>
                                         <td>{{ $course->price }}</td>
                                         <td>{{ $course->start_date }}</td>
@@ -88,6 +90,12 @@
                 @else
                     <p style="text-align: center; color:brown; margin-top:15px;">لا توجد دورات تدريبية متاحة</p>
                 @endif
+
+                {{-- Pagination Links --}}
+                <div id="pagination-links-ajax" style="overflow-x: hidden; padding-inline: 15px;">
+                    {{ $trainingCourses->links('pagination::bootstrap-5') }}
+                </div>
+
             </div>
             <!-- /.card-body -->
         </div>
@@ -131,34 +139,27 @@
             $(this).closest('.alert').remove()
         })
 
-        // handle delete confirmation
-        let confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        let cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-        let delete_course_btn = document.querySelectorAll('.delete-course-btn');
-        let modal = document.getElementById('modal');
+        // استخدم Event Delegation على عنصر أب ثابت (مثل document)
+        document.addEventListener('click', function(event) {
+            // تحقق مما إذا كان العنصر الذي تم النقر عليه يحتوي على الكلاس 'delete-course-btn'
+            if (event.target.classList.contains('delete-course-btn')) {
+                let modal = document.getElementById('modal');
+                let formToDelete = event.target.closest('.delete-course-form');
 
-        let formToDelete = null;
-
-        delete_course_btn.forEach(button => {
-            button.addEventListener('click', function() {
-                console.log('Delete button clicked', this.id);
-
-                modal.style.display = 'block';
-                formToDelete = this.closest('.delete-course-form');
-            });
+                if (modal && formToDelete) {
+                    modal.style.display = 'block';
+                    document.getElementById('confirmDeleteBtn').onclick = function() {
+                        formToDelete.submit();
+                    };
+                }
+            }
         });
+
+        // تأكد من أن مستمعي الأحداث الآخرين للمودال موجودين
+        let modal = document.getElementById('modal');
+        let cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
         cancelDeleteBtn.addEventListener('click', function() {
-            // Close the modal
-            modal.style.display = 'none';
-            formToDelete = null;
-        });
-
-        confirmDeleteBtn.addEventListener('click', function() {
-            if (formToDelete) {
-                formToDelete.submit();
-            }
-
             modal.style.display = 'none';
         });
     </script>

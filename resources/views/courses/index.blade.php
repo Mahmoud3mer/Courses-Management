@@ -30,14 +30,14 @@
             </div>
         @endif
 
-        <div class="card">
-            <div class="card-header" style="display: flex; flex-direction: column; gap:10px;">
+        <div class="">
+            <div class="" style="display: flex; flex-direction: column; gap:10px;">
                 <div style="display: flex; gap:25px;">
                     <h3 class="card-title"> بيانات الكورسات </h3>
                     <a href="{{ route('courses.create') }}"><button class="btn btn-primary btn-sm">اضافة جديد</button></a>
                 </div>
 
-                <div class="card-tools" style="display: flex; gap: 10px; align-items: center;">
+                <div class="" style="display: flex; gap: 10px; align-items: center;">
                     <div class="input-group input-group-sm" style="width: 250px;">
                         <input type="text" placeholder="البحث باسم الكورس" name="searchByName" id="searchByName"
                             class="form-control float-right">
@@ -58,7 +58,7 @@
             {{-- مكان لعرض رسالة النجاح أو الخطأ  Alert --}}
             <div id="liveAlertPlaceholder"></div>
 
-            <div class="card-body table-responsive p-0" style="height: 300px;" id="ajax_response_table">
+            <div class="table-responsive p-0" id="ajax_response_table" style="margin-top: 20px;">
                 @if (@isset($courses) and !@empty($courses) and count($courses) > 0)
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
@@ -103,10 +103,17 @@
                 @else
                     <p style="text-align: center; color:brown; margin-top:15px;">لا توجد كورسات متاحة</p>
                 @endif
+
+                {{-- Pagination Links --}}
+                <div id="pagination-links-ajax" style="overflow-x: hidden; padding-inline: 15px;">
+                    {{ $courses->links('pagination::bootstrap-5') }}
+                </div>
             </div>
             <!-- /.card-body -->
         </div>
         <!-- /.card -->
+
+
     </div>
 
     {{-- My Modal to improve delete --}}
@@ -146,36 +153,30 @@
             $(this).closest('.alert').remove()
         })
 
-        // handle delete confirmation
-        let confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        let cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-        let delete_course_btn = document.querySelectorAll('.delete-course-btn');
-        let modal = document.getElementById('modal');
+        // استخدم Event Delegation على عنصر أب ثابت (مثل document)
+        document.addEventListener('click', function(event) {
+            // تحقق مما إذا كان العنصر الذي تم النقر عليه يحتوي على الكلاس 'delete-course-btn'
+            if (event.target.classList.contains('delete-course-btn')) {
+                let modal = document.getElementById('modal');
+                let formToDelete = event.target.closest('.delete-course-form');
 
-        let formToDelete = null;
-
-        delete_course_btn.forEach(button => {
-            button.addEventListener('click', function() {
-                console.log('Delete button clicked', this.id);
-
-                modal.style.display = 'block';
-                formToDelete = this.closest('.delete-course-form');
-            });
+                if (modal && formToDelete) {
+                    modal.style.display = 'block';
+                    document.getElementById('confirmDeleteBtn').onclick = function() {
+                        formToDelete.submit();
+                    };
+                }
+            }
         });
+
+        // تأكد من أن مستمعي الأحداث الآخرين للمودال موجودين
+        let modal = document.getElementById('modal');
+        let cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
         cancelDeleteBtn.addEventListener('click', function() {
-            // Close the modal
-            modal.style.display = 'none';
-            formToDelete = null;
-        });
-
-        confirmDeleteBtn.addEventListener('click', function() {
-            if (formToDelete) {
-                formToDelete.submit();
-            }
-
             modal.style.display = 'none';
         });
+        
 
         // Handle Search
         $(document).ready(function() {
@@ -203,6 +204,40 @@
                     }
                 })
             });
+
+
+            // Handle ajax pagination
+            $(document).on('click', '#pagination-links-ajax a', function(event) {
+                event.preventDefault();
+                let url = $(this).attr('href');
+                fetchCourses(url);
+            });
+
+
+            const fetchCourses = (url) => {
+                let searchValue = $('#searchByName').val();
+                let searchActive = $('#searchByActive').val();
+
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    dataType: 'html',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        searchByName: searchValue,
+                        searchByActive: searchActive
+                    },
+                    success: function(response) {
+                        $('#ajax_response_table').html(response);
+                        // Update pagination links
+                        $('#pagination-links-ajax').html(
+                            $(response).find('#pagination-links-ajax').html());
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
+            }
         });
     </script>
 @endpush

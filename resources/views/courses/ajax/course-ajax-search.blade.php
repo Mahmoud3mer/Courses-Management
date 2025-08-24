@@ -41,3 +41,5 @@
 @else
     <p style="text-align: center; color:brown; margin-top:15px;">لا توجد كورسات متاحة</p>
 @endif
+
+

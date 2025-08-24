@@ -55,3 +55,8 @@
 @else
     <p style="text-align: center; color:brown; margin-top:15px;">لا يوجد طلاب مُتاحين</p>
 @endif
+
+{{-- Pagination Links --}}
+<div id="pagination-links-ajax" style="overflow-x: hidden; padding-inline: 15px;">
+    {{ $students->links('pagination::bootstrap-5') }}
+</div>

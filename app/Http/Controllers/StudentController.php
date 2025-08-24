@@ -7,6 +7,9 @@ use App\Models\Student;
 use App\Models\Country;
 use App\Http\Requests\CreateStudentValidation;
 use App\Http\Requests\UpdateStudentValidation;
+use Illuminate\Support\Facades\Notification;
+use App\Models\User;
+use App\Notifications\CreateStudent;
 
 class StudentController extends Controller
 {
@@ -15,10 +18,19 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $students = Student::paginate(5);
         $countries = Country::select('id', 'name')->where('active', 1)->get();
         // dd($students);
-        return view('students.index', compact('students', 'countries'));
+
+        // Notification
+        $notifications = auth()->user()->notifications;
+        // dd($notifications);
+
+        if (request()->ajax()) {
+            return view('students.ajax.student-ajax-search', compact('students', 'countries'));
+        }
+
+        return view('students.index', compact('students', 'countries', 'notifications'));
     }
 
     /**
@@ -67,6 +79,13 @@ class StudentController extends Controller
         // إنشاء الطالب باستخدام البيانات المعدلة
         Student::create($validatedData);
         
+        // إرسال إشعار بإنشاء الطالب
+        $users = User::select('id')->get();
+        $content = 'تم إضافة طالب جديد: ' . $validatedData['name'];
+        Notification::send($users, new CreateStudent(
+            $validatedData['name'], 
+            $content
+        ));
 
         return redirect()->route('students.index')->with('success', 'تم إضافة الطالب بنجاح');
     }
@@ -168,11 +187,11 @@ class StudentController extends Controller
             $searchCountry = $request->input('searchByCountry');
 
             if ($searchCountry == 'all') {
-                $students = Student::where('name', 'like', '%' . $searchName . '%')->get();
+                $students = Student::where('name', 'like', '%' . $searchName . '%')->paginate(5);
             } else {
                 $students = Student::where('name', 'like', '%' . $searchName . '%')
                     ->where('country_id', $searchCountry)
-                    ->get();
+                    ->paginate(5);
             }
             
             return view('students.ajax.student-ajax-search', compact('students'));
