@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -29,7 +30,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->intended('/');
         }
 
         return redirect()->back()->with(['error' => 'هناك خطأ في البريد الإلكتروني أو كلمة المرور.']);
@@ -71,7 +72,7 @@ class AuthController extends Controller
         // Log the user in
         auth()->login($user);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('/');
     }
 
     public function logout(Request $request)
@@ -80,5 +81,39 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');
+    }
+
+    // Google OAuth
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {   
+        try {
+            $socialUser = Socialite::driver('google')->user();
+            // dd($socialUser->id);
+            $user = User::where('google_id', $socialUser->id)->first();
+            if ($user) {
+                Auth::login($user);
+                return redirect()->route('dashboard');
+            }
+
+            $newUser = User::create([
+                'name' => $socialUser->name,
+                'email' => $socialUser->email,
+                'google_id' => $socialUser->id,
+                'provider_name' => 'google',
+                'password' => encrypt('password_dummy'), // كلمة مرور وهمية
+            ]);
+
+            Auth::login($newUser);
+            return redirect()->route('dashboard');
+
+        } catch (\Throwable $th) {
+            // dd($th);
+            return redirect('/login')->with('error', 'فشل تسجيل الدخول باستخدام Google.');
+        }
     }
 }

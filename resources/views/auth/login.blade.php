@@ -5,6 +5,25 @@
     <meta charset="UTF-8">
     <title>تسجيل الدخول</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .google-icon{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #000;
+        }
+        .google-icon:hover{
+            text-decoration: underline;
+            color: #830000;
+        }
+        .google-icon img{
+            width: 20px;
+            height: 20px;
+        }
+    </style>
 </head>
 
 <body style="overflow-x:hidden; overflow-y:auto">
@@ -45,6 +64,9 @@
 
                 <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
                     <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+                    <a href="{{ route('auth.google') }}" class="google-icon">
+                        Google <img src="{{asset('google.png')}}" alt="">
+                    </a>
                     <a href="{{ route('register') }}" class="btn btn-link">إنشاء حساب جديد</a>
                 </div>
             </form>

@@ -9,7 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LanguageController;
 
 // Home Page
-Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('/', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 
 // Courses routs
 Route::get('courses', [CourseController::class, 'index'])->name('courses.index');
@@ -41,6 +41,15 @@ Route::post('register', [AuthController::class, 'register'])->name('register.pos
 
 // Localization Route
 Route::get('language/switch', [LanguageController::class, 'switchLocale'])->name('language.switch');
+
+
+// OAuth Google
+// توجيه المستخدم لمزود الخدمة
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+
+// استلام البيانات بعد تسجيل الدخول
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
 
 // Fallback Route
 Route::fallback(function () {
