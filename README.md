@@ -7,6 +7,12 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+# Log In Page
+<img width="1919" height="922" alt="image" src="https://github.com/user-attachments/assets/b4ef261c-293f-423c-a83e-e9f9b28e6d01" />
+
+# Register Page
+<img width="1919" height="920" alt="image" src="https://github.com/user-attachments/assets/9101cad3-397b-4120-aabe-d51fc5b9d4bb" />
+
 <img width="1918" height="912" alt="image" src="https://github.com/user-attachments/assets/e21a3c64-41b7-4429-8a58-d4f348443a23" />
 
 # Demo Viedeo 
